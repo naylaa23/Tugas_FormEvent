@@ -6,8 +6,8 @@ import Input from "../components/Input";
 import PasswordInput from "../components/PasswordInput";
 import Select from "../components/Select";
 import Textarea from "../components/Textarea";
-// Baris import Button di sini sudah dihapus karena tidak digunakan
 
+// 1. Definisikan Schema Validasi
 const schema = z.object({
   name: z.string().min(1, "Nama wajib diisi"),
   email: z.string().email("Email tidak valid"),
@@ -16,16 +16,19 @@ const schema = z.object({
   bio: z.string().optional(),
 });
 
+// 2. Buat Tipe Data berdasarkan Schema (Penting untuk TypeScript)
+type RegisterFormData = z.infer<typeof schema>;
+
 export default function RegisterForm() {
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm({
+  } = useForm<RegisterFormData>({
     resolver: zodResolver(schema),
   });
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: RegisterFormData) => {
     await new Promise((res) => setTimeout(res, 2000));
     console.log(data);
   };
@@ -40,32 +43,33 @@ export default function RegisterForm() {
           Daftar
         </h2>
 
+        {/* Gunakan register dengan benar sesuai nama field di schema */}
         <Input
           label="Nama"
           name="name"
           register={register}
-          error={errors.name?.message as string} // Ditambah casting string untuk TS
+          error={errors.name?.message}
         />
 
         <Input
           label="Email"
           name="email"
           register={register}
-          error={errors.email?.message as string}
+          error={errors.email?.message}
         />
 
         <PasswordInput
           label="Password"
           name="password"
           register={register}
-          error={errors.password?.message as string}
+          error={errors.password?.message}
         />
 
         <Select
           label="Event"
           name="event"
           register={register}
-          error={errors.event?.message as string}
+          error={errors.event?.message}
           options={[
             { label: "Invofest", value: "invofest" },
             { label: "Workshop AI", value: "ai" },
@@ -76,14 +80,13 @@ export default function RegisterForm() {
           label="Bio"
           name="bio"
           register={register}
-          error={errors.bio?.message as string}
+          error={errors.bio?.message}
         />
 
-        {/* Tetap pakai tag button kecil sesuai kodemu sebelumnya */}
         <button
           type="submit"
           disabled={isSubmitting}
-          className="mt-2 bg-black text-white py-2 rounded-md text-sm hover:opacity-90 transition"
+          className="mt-2 bg-black text-white py-2 rounded-md text-sm hover:opacity-90 transition disabled:bg-gray-400"
         >
           {isSubmitting ? "Loading..." : "Daftar"}
         </button>
