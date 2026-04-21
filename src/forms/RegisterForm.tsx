@@ -6,7 +6,7 @@ import Input from "../components/Input";
 import PasswordInput from "../components/PasswordInput";
 import Select from "../components/Select";
 import Textarea from "../components/Textarea";
-import Button from "../components/Button";
+// Baris import Button di sini sudah dihapus karena tidak digunakan
 
 const schema = z.object({
   name: z.string().min(1, "Nama wajib diisi"),
@@ -44,28 +44,28 @@ export default function RegisterForm() {
           label="Nama"
           name="name"
           register={register}
-          error={errors.name?.message}
+          error={errors.name?.message as string} // Ditambah casting string untuk TS
         />
 
         <Input
           label="Email"
           name="email"
           register={register}
-          error={errors.email?.message}
+          error={errors.email?.message as string}
         />
 
         <PasswordInput
           label="Password"
           name="password"
           register={register}
-          error={errors.password?.message}
+          error={errors.password?.message as string}
         />
 
         <Select
           label="Event"
           name="event"
           register={register}
-          error={errors.event?.message}
+          error={errors.event?.message as string}
           options={[
             { label: "Invofest", value: "invofest" },
             { label: "Workshop AI", value: "ai" },
@@ -76,9 +76,10 @@ export default function RegisterForm() {
           label="Bio"
           name="bio"
           register={register}
-          error={errors.bio?.message}
+          error={errors.bio?.message as string}
         />
 
+        {/* Tetap pakai tag button kecil sesuai kodemu sebelumnya */}
         <button
           type="submit"
           disabled={isSubmitting}
